@@ -2,7 +2,7 @@
 
 void main();
 
-extern unsigned long _etext, _data, _edata, _bss, _ebss;
+extern unsigned long _etext, _data, _edata, _program, _eprogram, _bss, _ebss;
 
 void resetISR() {
     // An axplanation of the tasks resetISR must carry out is available in
@@ -12,6 +12,10 @@ void resetISR() {
     unsigned long *src=&_etext, *dest=&_data;
     while(dest < &_edata)
         *dest++ = *src++;
+    dest = &_program;
+    while(dest < &_eprogram) {
+        *dest++ = *src++;
+    }
     // .bss is the section for zero-initialized variables
     dest=&_bss;
     while(dest < &_ebss)

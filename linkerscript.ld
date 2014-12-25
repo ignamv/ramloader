@@ -2,7 +2,8 @@
 MEMORY
 {
     FLASH (RX): ORIGIN = 0x0, LENGTH = 0x40000
-    SRAM (RW): ORIGIN = 0x20000000, LENGTH = 0x8000
+    SRAM1 (RW): ORIGIN = 0x20000000, LENGTH = 0x4000
+    SRAM2 (RW): ORIGIN = 0x20004000, LENGTH = 0x4000
 }
 
 /* 
@@ -25,15 +26,18 @@ SECTIONS
     .data : AT ( ADDR (.text) + SIZEOF (.text) ) {
         _data = .;
         *(.data*)
+        _edata = .;
+    } > SRAM1 /* Set the VMA (runtime address) in SRAM */
+    .program : AT ( LOADADDR (.data) + SIZEOF (.data) ) {
         _program = .;
         KEEP(*(.program))
-        _edata = .;
-    } > SRAM /* Set the VMA (runtime address) in SRAM */
+        _eprogram = .;
+    } > SRAM2
     .bss : {
         _bss = .;
         *(.bss*)
         _ebss = .;
-    } > SRAM
+    } > SRAM1
 }
 
 ENTRY ( resetISR )
