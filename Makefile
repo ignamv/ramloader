@@ -34,7 +34,7 @@ LD=${PREFIX}-ld
 CC=${PREFIX}-gcc
 OBJCOPY=${PREFIX}-objcopy
 OBJDUMP=${PREFIX}-objdump
-
+GDB=${PREFIX}-gdb
 
 %.S: %.c
 	$(CC) $(AFLAGS) $(CFLAGS) -S -o $@ $<
@@ -57,7 +57,7 @@ main.axf: startup.o
 dump.txt: main.axf
 	$(OBJDUMP) -xdS $< > $@
 
-.PHONY: download tags
+.PHONY: download tags clean debug
 
 download: main.bin
 	lm4flash -v -s 0E103AE6 $<
@@ -67,3 +67,7 @@ tags: *.c
 
 clean:
 	rm -f *.o *.bin *.axf dump.txt
+
+debug: main.axf
+	$(GDB) -x debug $<
+

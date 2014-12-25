@@ -16,8 +16,6 @@ SECTIONS
         /* Prevent garbage collection of the vector table */
         KEEP(*(.vector_table))
         *(.text.*)
-        _program = .;
-        KEEP(*(.program))
         _etext = .;
     } > FLASH
     /* Initialized variables
@@ -27,6 +25,8 @@ SECTIONS
     .data : AT ( ADDR (.text) + SIZEOF (.text) ) {
         _data = .;
         *(.data*)
+        _program = .;
+        KEEP(*(.program))
         _edata = .;
     } > SRAM /* Set the VMA (runtime address) in SRAM */
     .bss : {
