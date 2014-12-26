@@ -17,22 +17,20 @@ SECTIONS
         /* Prevent garbage collection of the vector table */
         KEEP(*(.vector_table))
         *(.text.*)
+    } > FLASH
+    .rodata : {
+        *(.rodata*)
         _etext = .;
     } > FLASH
     /* Initialized variables
      * Their initial values are stored in Flash, and the startup routine must
-     * copy them to SRAM
-     * AT sets the LMA in Flash, right after the code */
-    .data : AT ( ADDR (.text) + SIZEOF (.text) ) {
+     * copy them to SRAM */
+    .data : {
         _data = .;
         *(.data*)
         _edata = .;
-    } > SRAM1 /* Set the VMA (runtime address) in SRAM */
-    .program : AT ( LOADADDR (.data) + SIZEOF (.data) ) {
-        _program = .;
-        KEEP(*(.program))
-        _eprogram = .;
-    } > SRAM2
+    } > SRAM1 AT> FLASH /* Set the VMA (runtime address) in SRAM 
+                                   LMA (load address) in FLASH */
     .bss : {
         _bss = .;
         *(.bss*)
