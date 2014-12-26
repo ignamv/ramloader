@@ -43,8 +43,12 @@ GDB=${PREFIX}-gdb
 	$(CC) $(AFLAGS) $(CFLAGS) -c -o $@ $<
 %.o: %.S
 	$(CC) $(AFLAGS) $(CFLAGS) -c -o $@ $<
+%.srec: %.axf
+	$(OBJCOPY) -S -O srec --srec-len=8 $< $@
+	# Strip header
+	sed -i /^S0/d $@
 
-all: main.txt program.txt
+all: main.txt program.txt program.srec
 
 main.axf: main.o
 main.axf: program.o
@@ -70,7 +74,7 @@ tags: *.c
 	ctags *
 
 clean:
-	rm -f *.o *.bin *.axf main.txt program.txt
+	rm -f *.o *.bin *.axf main.txt program.txt *.srec
 
 debug: main.axf
 	$(GDB) -x debug $<
