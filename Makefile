@@ -28,6 +28,7 @@ CFLAGS=-mthumb                  \
 	   -g				        \
 	   ${INCLUDES}
 LDFLAGS=--gc-sections -T linkerscript.ld
+LDFLAGS2=--gc-sections -T linkprogram.ld
 
 AR=${PREFIX}-ar
 LD=${PREFIX}-ld
@@ -43,18 +44,21 @@ GDB=${PREFIX}-gdb
 %.o: %.S
 	$(CC) $(AFLAGS) $(CFLAGS) -c -o $@ $<
 
-all: dump.txt main.axf
+all: main.txt program.txt
 
 main.axf: main.o
 main.axf: program.o
 main.axf: startup.o
+
+program.axf: program.o
+	$(LD) $(LDFLAGS2) -o $@ $^
 
 %.axf:
 	$(LD) $(LDFLAGS) -o $@ $^
 %.bin: %.axf
 	$(OBJCOPY) -O binary $< $@
 
-dump.txt: main.axf
+%.txt: %.axf
 	$(OBJDUMP) -xdS $< > $@
 
 .PHONY: download tags clean debug
@@ -66,7 +70,7 @@ tags: *.c
 	ctags *
 
 clean:
-	rm -f *.o *.bin *.axf dump.txt
+	rm -f *.o *.bin *.axf main.txt program.txt
 
 debug: main.axf
 	$(GDB) -x debug $<
