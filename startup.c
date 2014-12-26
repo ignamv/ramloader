@@ -53,7 +53,8 @@ void (*vectortable[])(void) = {
     0,
     missingISR,         // PendSV
     missingISR,         // SysTick
-    missingISR,         // IRQ 16   GPIO Port A
+};
+/*  missingISR,         // IRQ 16   GPIO Port A
     missingISR,         // IRQ 17   GPIO Port B
     missingISR,         // IRQ 19   GPIO Port C
     missingISR,         // IRQ 20   GPIO Port D
@@ -191,4 +192,4 @@ void (*vectortable[])(void) = {
     0,                  // IRQ 152
     0,                  // IRQ 153
     0,                  // IRQ 154
-};
+};*/
