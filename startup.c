@@ -10,10 +10,7 @@ void resetISR() {
     // .data is the section for initialized variables
     // Copy the initial values from Flash to SRAM
     unsigned long *src=&_etext, *dest=&_data;
-    while(dest < &_edata)
-        *dest++ = *src++;
-    dest = &_program;
-    while(dest < &_eprogram) {
+    while(dest < &_edata) {
         *dest++ = *src++;
     }
     // .bss is the section for zero-initialized variables
