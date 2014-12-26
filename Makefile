@@ -15,7 +15,7 @@ AFLAGS=-mthumb \
 CFLAGS=-mthumb                  \
        ${CPU}                   \
        ${FPU}                   \
-       -Os                      \
+       -O0                      \
        -ffunction-sections      \
        -fdata-sections          \
        -fno-stack-protector     \
@@ -59,6 +59,7 @@ program.axf: program.o
 
 %.axf:
 	$(LD) $(LDFLAGS) -o $@ $^
+
 %.bin: %.axf
 	$(OBJCOPY) -O binary $< $@
 
