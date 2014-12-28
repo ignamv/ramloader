@@ -7,6 +7,8 @@
 #include <driverlib/uart.h>
 #include "../../ek-lm4f120xl.h"
 
+#ifdef SIMULATE_SERIAL
+
 const char *serial = 
 "S30D200040001E4B1A6842F0010272\n"
 "S30D200040081A6053F8102C42F057\n"
@@ -27,15 +29,18 @@ const char *serial =
 "S30D2000408024C0004018C00040D6\n"
 "S3092000408800C000400E\n"
 "S7052000400199\n";
-//#define getchar()   ROM_UARTCharGet(UART0_BASE)
-//#define getchar()   (*serial++)
-#define putchar(c)   ROM_UARTCharPut(UART0_BASE, (c))
 
 unsigned char getchar() {
     unsigned char ret = *serial;
     serial++;
     return ret;
 }
+
+#else
+
+#define getchar()   ROM_UARTCharGet(UART0_BASE)
+
+#endif
 
 // The linker will point this to the section reserved for the program.
 // Right now this section is loaded from flash to SRAM by the reset ISR.
@@ -91,7 +96,8 @@ void load_srec()
 {
     unsigned char size, *address, checksum;
     while (1) {
-        switch (getchar()) {
+        char cc = getchar();
+        switch (cc) {
             case '\n':
             case '\r':
                 continue;
