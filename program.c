@@ -1,8 +1,7 @@
 #include <inc/lm4f120h5qr.h>
 #include "../../ek-lm4f120xl.h"
 
-__attribute__((section(".program")))
-int myprogram(void) {
+int main(void) {
     // Enable UART0 clock
     SYSCTL_RCGCUART_R |= SYSCTL_RCGCUART_R0;
     // Enable GPIOA clock
