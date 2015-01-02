@@ -1,11 +1,14 @@
 // Jump to a program stored in RAM
 #include <inc/hw_types.h>
+#include <inc/lm4f120h5qr.h>
 #include <driverlib/debug.h>
 #include <driverlib/rom.h>
 #include <driverlib/gpio.h>
 #include <driverlib/sysctl.h>
 #include <driverlib/uart.h>
 #include "../../ek-lm4f120xl.h"
+
+extern unsigned long _sram2;
 
 #ifdef SIMULATE_SERIAL
 
@@ -124,6 +127,8 @@ void load_srec()
             case '7':
                 // Skip size
                 read_hex();
+                // Switch to RAM vector table
+                NVIC_VTABLE_R = (unsigned long)&_sram2;
                 // Jump to program start
                 address =  read_address();
                 ((void (*)()) address)();

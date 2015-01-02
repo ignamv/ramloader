@@ -36,6 +36,10 @@ SECTIONS
         *(.bss*)
         _ebss = .;
     } > SRAM1
+    .sarasa : {
+        /* To know where to point the vector table */
+        _sram2 = .;
+    } > SRAM2 AT> FLASH
 }
 
 ENTRY ( resetISR )
