@@ -27,8 +27,8 @@ CFLAGS=-mthumb                  \
 	   -DDEBUG					\
 	   -g				        \
 	   ${INCLUDES}
-LDFLAGS=--gc-sections -T linkerscript.ld
-LDFLAGS2=--gc-sections -T linkprogram.ld
+LDFLAGS2=--gc-sections -T linkerscript.ld
+LDFLAGS=--gc-sections -T linkprogram.ld
 
 AR=${PREFIX}-ar
 LD=${PREFIX}-ld
@@ -51,13 +51,12 @@ GDB=${PREFIX}-gdb
 all: main.txt program.txt program.srec
 
 main.axf: main.o
-main.axf: program.o
 main.axf: startup.o
 
-program.axf: program.o
+main.axf: main.o
 	$(LD) $(LDFLAGS2) -o $@ $^
 
-%.axf:
+%.axf: %.o
 	$(LD) $(LDFLAGS) -o $@ $^
 
 %.bin: %.axf
